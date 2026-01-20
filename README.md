@@ -1,4 +1,4 @@
-# KoboldCpp Library
+# Kobold Library
 An extension designed to extend STscript with commands that make use of KCpp's API endpoints.
 
 ## Installation:
