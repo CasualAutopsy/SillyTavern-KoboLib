@@ -12,6 +12,11 @@ import {
 import {convertJSONtoGrammar} from './src/api.js'
 import {clearEphemeralBNF, ephemeralBNF, sendBNF} from "./src/cmds.js";
 
+
+const extensionName = 'SillyTavern-KoboLib';
+const extensionFolder = `scripts/extensions/third-party/${extensionName}`;
+
+
 async function loadSettings()
 {
     if ( ! extension_settings.kcpplibs )
@@ -107,24 +112,10 @@ function registerEvents() {
 }
 
 jQuery(async () => {
-    const html =`
-    <div class="kcpplib_settings">
-        <div class="inline-drawer">
-            <div class="inline-drawer-toggle inline-drawer-header">
-                <b>KCPP Library</b>
-                <div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div>
-            </div>
-            <div class="inline-drawer-content">
-                <div class="flex-container flexFlowColumn">
-                    <h4>KoboldCPP API URL</h4>
-                    <input id="kcpplib_api_url" class="text_pole textarea_compact" type="text" />
-                </div>
-            </div>
-        </div>
-    </div>`;
+    const settingsHtml = await $.get(`${extensionFolder}/src/html/settings.html`);
+    $('#extensions_settings').append(settingsHtml);
 
     await loadSettings();
-    $('#extensions_settings').append(html);
     $('#kcpplib_api_url').val(extension_settings.kcpplibs.url).on('input',onKoboldURLChanged);
 
     registerEvents();
