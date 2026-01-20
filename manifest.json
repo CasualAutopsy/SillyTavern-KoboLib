@@ -1,0 +1,12 @@
+{
+    "display_name": "KoboldCpp Library",
+    "loading_order": 1998,
+    "requires": [],
+    "optional": [],
+    "js": "index.js",
+    "css": "style.css",
+    "author": "CasualAutopsy",
+    "version": "0.0.1",
+    "homePage": "https://github.com/CasualAutopsy/SillyTavern-KCpp-Libs",
+    "auto_update": false
+}
