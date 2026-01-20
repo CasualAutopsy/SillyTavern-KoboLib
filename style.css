@@ -1,9 +1,9 @@
-#kcpplib_settings {
+#kobolib_settings {
 display: flex;
 flex-direction: column;
 }
 
-#kcpplib_settings textarea {
+#kobolib_settings textarea {
 font-size: calc(var(--mainFontSize) * 0.9);
 line-height: 1.2;
 }
