@@ -1,7 +1,7 @@
 import {saveSettingsDebounced} from '../../../../../script.js';
 import {extension_settings} from '../../../../extensions.js';
 
-import {getPerfInfo} from './src/api.js';
+import {getPerfInfo} from './api.js';
 
 export async function ephemeralBNF(args, value) {
     extension_settings.kobolib.eph_bnf = {
