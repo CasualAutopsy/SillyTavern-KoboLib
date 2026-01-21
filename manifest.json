@@ -6,7 +6,7 @@
     "js": "index.js",
     "css": "style.css",
     "author": "CasualAutopsy",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "homePage": "https://github.com/CasualAutopsy/SillyTavern-KoboLib",
     "auto_update": false
 }
