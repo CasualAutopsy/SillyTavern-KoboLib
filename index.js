@@ -9,8 +9,15 @@ import {
     SlashCommandNamedArgument
 } from '../../../slash-commands/SlashCommandArgument.js';
 
-import {convertJSONtoGrammar, sendEmbeddingRequest} from './src/api.js'
-import {clearEphemeralBNF, ephemeralBNF, sendBNF} from "./src/cmds.js";
+import {convertJSONtoGrammar, sendEmbeddingRequest} from './src/api.js';
+import {
+    clearEphemeralBNF,
+    ephemeralBNF,
+    sendBNF,
+    getTotalCount,
+    getTokenCount,
+    getInputCount
+} from "./src/cmds.js";
 
 
 const extensionName = 'SillyTavern-KoboLib';
@@ -102,6 +109,30 @@ SlashCommandParser.addCommandObject(SlashCommand.fromProps({
     splitUnnamedArgument: false,
     helpString: 'Set the grammar string for the next generation request.\n(G/E)BNF Sampler parameters are reset upon finishing a gen request.'
 }));
+
+SlashCommandParser.addCommandObject(SlashCommand.fromProps({
+    name: "last-token-input",
+    aliases: ["kcpp-token-input", "last-input-count"],
+    callback: getInputCount,
+    helpString: 'Get the prompt token count from the previous generation request.',
+    returns: "Number of tokens"
+}))
+
+SlashCommandParser.addCommandObject(SlashCommand.fromProps({
+    name: "last-token-output",
+    aliases: ["kcpp-token-output", "last-token-count"],
+    callback: getTokenCount,
+    helpString: 'Get the generated token count from the last generation request.',
+    returns: "Number of tokens"
+}))
+
+SlashCommandParser.addCommandObject(SlashCommand.fromProps({
+    name: "last-token-total",
+    aliases: ["kcpp-token-total", "last-total-count"],
+    callback: getTotalCount,
+    helpString: 'Get the total token count from the last generation request.',
+    returns: "Number of tokens"
+}))
 
 
 
