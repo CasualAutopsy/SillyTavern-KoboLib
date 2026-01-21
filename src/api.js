@@ -82,9 +82,27 @@ export async function convertJSONtoGrammar(args,value){
     }
 }
 
-
+// Info API endpoints
 export async function getPerfInfo(){
     const url = `${extension_settings.kobolib.url}/api/extra/perf`;
+
+    const header = {
+        "accept": "application/json"
+    };
+
+    try {
+        const response = await fetch(url, {
+            method: "GET",
+            headers: header
+        });
+
+        return await response.json();
+    } catch (e) {
+        console.error('KCppLibs:',e);
+    }
+}
+export async function getVersionInfo(){
+    const url = `${extension_settings.kobolib.url}/api/extra/version`;
 
     const header = {
         "accept": "application/json"
