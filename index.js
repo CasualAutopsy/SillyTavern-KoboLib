@@ -9,7 +9,7 @@ import {
     SlashCommandNamedArgument
 } from '../../../slash-commands/SlashCommandArgument.js';
 
-import {convertJSONtoGrammar} from './src/api.js'
+import {convertJSONtoGrammar, sendEmbeddingRequest} from './src/api.js'
 import {clearEphemeralBNF, ephemeralBNF, sendBNF} from "./src/cmds.js";
 
 
@@ -19,12 +19,12 @@ const extensionFolder = `scripts/extensions/third-party/${extensionName}`;
 
 async function loadSettings()
 {
-    if ( ! extension_settings.kcpplibs )
-        extension_settings.kcpplibs = { "url": "http://127.0.0.1:5001", "eph_bnf": "" };
-    if ( ! extension_settings.kcpplibs.url )
-        extension_settings.kcpplibs.url = "http://127.0.0.1:5001";
-    if ( ! extension_settings.kcpplibs.url )
-        extension_settings.kcpplibs.eph_bnf = "";
+    if ( ! extension_settings.kobolib )
+        extension_settings.kobolib = { "url": "http://127.0.0.1:5001", "eph_bnf": "" };
+    if ( ! extension_settings.kobolib.url )
+        extension_settings.kobolib.url = "http://127.0.0.1:5001";
+    if ( ! extension_settings.kobolib.url )
+        extension_settings.kobolib.eph_bnf = "";
 
     saveSettingsDebounced();
 }
@@ -35,37 +35,38 @@ function trimTrailingSlash(str) {
 }
 
 function onKoboldURLChanged() {
-    extension_settings.kcpplibs.url = trimTrailingSlash($(this).val())
+    extension_settings.kobolib.url = trimTrailingSlash($(this).val())
     saveSettingsDebounced();
 }
 
 
-
-
-/*
 SlashCommandParser.addCommandObject(SlashCommand.fromProps({
     name: "kcpp-vectorize",
     aliases: ["kcpp-embed", "kcpp-embedding"],
     callback: sendEmbeddingRequest,
-    namedArgumentList: SlashCommandNamedArgument.fromProps({
-        name: "truncate",
-        description: "",
-        typeList: [ARGUMENT_TYPE.BOOLEAN],
-        isRequired: false,
-        acceptsMultiple: false,
-        default: true,
-    }),
-    unnamedArgumentList: SlashCommandArgument.fromProps({
-        description: "",
-        typeList: [ARGUMENT_TYPE.LIST, ARGUMENT_TYPE.STRING],
-        isRequired: true,
-        acceptsMultiple: false
-    }),
+    namedArgumentList: [
+        SlashCommandNamedArgument.fromProps({
+            name: "truncate_input",
+            aliases: ["truncate", "trunc"],
+            description: "",
+            typeList: [ARGUMENT_TYPE.BOOLEAN],
+            isRequired: false,
+            acceptsMultiple: false,
+            defaultValue: true
+        })
+    ],
+    unnamedArgumentList: [
+        SlashCommandArgument.fromProps({
+            description: "A string or list of strings to encode into embedding vectors",
+            typeList: [ARGUMENT_TYPE.LIST, ARGUMENT_TYPE.STRING],
+            isRequired: true,
+            acceptsMultiple: false
+        })
+    ],
     splitUnnamedArgument: false,
     helpString: '',
-    returns: "Dictionary containing embedding vectors"
+    returns: "List containing embedding vectors"
 }));
-*/
 
 SlashCommandParser.addCommandObject(SlashCommand.fromProps({
     name: "kcpp-json-to-grammar",
@@ -116,7 +117,7 @@ jQuery(async () => {
     $('#extensions_settings').append(settingsHtml);
 
     await loadSettings();
-    $('#kcpplib_api_url').val(extension_settings.kcpplibs.url).on('input',onKoboldURLChanged);
+    $('#kobolib_api_url').val(extension_settings.kobolib.url).on('input',onKoboldURLChanged);
 
     registerEvents();
 });
