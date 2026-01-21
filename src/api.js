@@ -1,5 +1,6 @@
 import {extension_settings} from '../../../../extensions.js';
 
+
 export async function sendEmbeddingRequest(args, value) {
     const url = `${extension_settings.kobolib.url}/api/extra/embeddings`;
 
@@ -76,6 +77,26 @@ export async function convertJSONtoGrammar(args,value){
         result = result["result"];
 
         return result;
+    } catch (e) {
+        console.error('KCppLibs:',e);
+    }
+}
+
+
+export async function getPerfInfo(){
+    const url = `${extension_settings.kobolib.url}/api/extra/perf`;
+
+    const header = {
+        "accept": "application/json"
+    };
+
+    try {
+        const response = await fetch(url, {
+            method: "GET",
+            headers: header
+        });
+
+        return await response.json();
     } catch (e) {
         console.error('KCppLibs:',e);
     }
