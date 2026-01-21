@@ -11,12 +11,12 @@ import {
 
 import {convertJSONtoGrammar, sendEmbeddingRequest} from './src/api.js';
 import {
-    clearEphemeralBNF,
-    ephemeralBNF,
-    sendBNF,
-    getTotalCount,
-    getTokenCount,
-    getInputCount
+    clearEphemeralBNF, ephemeralBNF,
+    sendBNF, getTotalCount,
+    getTokenCount, getInputCount,
+    getTotalGens, getUpTime,
+    getIdleTime, getKoboVersion,
+    getPerfData, getVersionData
 } from "./src/cmds.js";
 
 
@@ -42,11 +42,11 @@ function trimTrailingSlash(str) {
 }
 
 function onKoboldURLChanged() {
-    extension_settings.kobolib.url = trimTrailingSlash($(this).val())
+    extension_settings.kobolib.url = trimTrailingSlash($(this).val());
     saveSettingsDebounced();
 }
 
-
+// Embedding commands
 SlashCommandParser.addCommandObject(SlashCommand.fromProps({
     name: "kcpp-vectorize",
     aliases: ["kcpp-embed", "kcpp-embedding"],
@@ -75,6 +75,8 @@ SlashCommandParser.addCommandObject(SlashCommand.fromProps({
     returns: "List containing embedding vectors"
 }));
 
+
+// BNF commands
 SlashCommandParser.addCommandObject(SlashCommand.fromProps({
     name: "kcpp-json-to-grammar",
     aliases: ["kcpp-schema-to-grammar", "kcpp-json-to-bnf"],
@@ -91,10 +93,6 @@ SlashCommandParser.addCommandObject(SlashCommand.fromProps({
     returns: "String - BNF grammar string"
 }));
 
-
-
-
-
 SlashCommandParser.addCommandObject(SlashCommand.fromProps({
     name: "ephemeral-bnf",
     aliases: ["eph-bnf"],
@@ -110,13 +108,14 @@ SlashCommandParser.addCommandObject(SlashCommand.fromProps({
     helpString: 'Set the grammar string for the next generation request.\n(G/E)BNF Sampler parameters are reset upon finishing a gen request.'
 }));
 
+// Token Count Commands
 SlashCommandParser.addCommandObject(SlashCommand.fromProps({
     name: "last-token-input",
     aliases: ["kcpp-token-input", "last-input-count"],
     callback: getInputCount,
     helpString: 'Get the prompt token count from the previous generation request.',
     returns: "Number of tokens"
-}))
+}));
 
 SlashCommandParser.addCommandObject(SlashCommand.fromProps({
     name: "last-token-output",
@@ -124,7 +123,7 @@ SlashCommandParser.addCommandObject(SlashCommand.fromProps({
     callback: getTokenCount,
     helpString: 'Get the generated token count from the last generation request.',
     returns: "Number of tokens"
-}))
+}));
 
 SlashCommandParser.addCommandObject(SlashCommand.fromProps({
     name: "last-token-total",
@@ -132,9 +131,50 @@ SlashCommandParser.addCommandObject(SlashCommand.fromProps({
     callback: getTotalCount,
     helpString: 'Get the total token count from the last generation request.',
     returns: "Number of tokens"
-}))
+}));
+
+SlashCommandParser.addCommandObject(SlashCommand.fromProps({
+    name: "kcpp-gen-count",
+    callback: getTotalGens,
+    helpString: 'Get the total amount of completed generation request since booting up KoboldCpp.',
+    returns: "Number of generations"
+}));
+
+SlashCommandParser.addCommandObject(SlashCommand.fromProps({
+    name: "kcpp-uptime",
+    callback: getUpTime,
+    helpString: 'Get the total KoboldCpp uptime in seconds.',
+    returns: "Uptime in seconds"
+}));
+
+SlashCommandParser.addCommandObject(SlashCommand.fromProps({
+    name: "kcpp-idle-time",
+    callback: getIdleTime,
+    helpString: 'Get the idle time since the last generation request in seconds.',
+    returns: "Idle time in seconds"
+}));
+
+SlashCommandParser.addCommandObject(SlashCommand.fromProps({
+    name: "kcpp-get-version",
+    callback: getKoboVersion,
+    helpString: 'Get the current version of KoboldCpp in use.',
+    returns: "String of current KCpp version."
+}));
 
 
+SlashCommandParser.addCommandObject(SlashCommand.fromProps({
+    name: "kcpp-perf-data",
+    callback: getPerfData,
+    helpString: 'Get the performance data from Kobold.',
+    returns: "Object containing performance data"
+}));
+
+SlashCommandParser.addCommandObject(SlashCommand.fromProps({
+    name: "kcpp-ver-data",
+    callback: getVersionData,
+    helpString: 'Get the version data from Kobold.',
+    returns: "Object containing version data"
+}));
 
 
 
